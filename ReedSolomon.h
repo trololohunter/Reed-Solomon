@@ -116,25 +116,26 @@ constexpr std::array<int, QmS * Qm> GG(std::array<int, Qm * S> hh, const std::ar
             }
         }
     }
+/*
     printf("\n");
     for (i = 0; i < S; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", hh[i * Qm + j]);
         printf("\n");
     }
-
+*/
     for (i = 0; i < QmS; ++i)
         Gg[i * Qm + i] = 1;
 
     for (i = 0; i < QmS; ++i)
         for (j = QmS; j < Qm; ++j)
             Gg[i * Qm + j] = 7 - hh[(j - QmS) * Qm + i];
-    printf("\n");
+/*    printf("\n");
     for (i = 0; i < QmS; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", Gg[i * Qm + j]);
         printf("\n");
-    }
+    } */
     return Gg;
 };
 

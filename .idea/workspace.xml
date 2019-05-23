@@ -11,7 +11,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="45e23c80-56a0-4d44-a215-e1756dc8bf9b" name="Default" comment="" />
+    <list default="true" id="45e23c80-56a0-4d44-a215-e1756dc8bf9b" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReedSolomon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ReedSolomon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReedSolomon.h" beforeDir="false" afterPath="$PROJECT_DIR$/ReedSolomon.h" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,20 +36,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReedSolomon.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ReedSolomon.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ReedSolomon.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+            <state relative-caret-position="195">
+              <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReedSolomon.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ReedSolomon.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ReedSolomon.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="113" column="96" lean-forward="true" selection-start-line="113" selection-start-column="96" selection-end-line="113" selection-end-column="96" />
+            <state relative-caret-position="268">
+              <caret line="141" column="4" selection-start-line="141" selection-start-column="4" selection-end-line="141" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -73,9 +77,9 @@
         <option value="$PROJECT_DIR$/cmake-build-debug/ReedSolomon.h" />
         <option value="$PROJECT_DIR$/cmake-build-debug/ReedSolomon.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/ReedSolomon.cpp" />
         <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/ReedSolomon.h" />
+        <option value="$PROJECT_DIR$/ReedSolomon.cpp" />
       </list>
     </option>
   </component>
@@ -139,12 +143,12 @@
       <workItem from="1558075080425" duration="9806000" />
       <workItem from="1558292724993" duration="600000" />
       <workItem from="1558332224240" duration="1826000" />
-      <workItem from="1558548947876" duration="2176000" />
+      <workItem from="1558548947876" duration="5085000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28927000" />
+    <option name="totallyTimeSpent" value="31836000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1920" height="1053" extended-state="6" />
@@ -178,7 +182,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -304,13 +308,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ReedSolomon.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -323,8 +320,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ReedSolomon.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="113" column="96" lean-forward="true" selection-start-line="113" selection-start-column="96" selection-end-line="113" selection-end-column="96" />
+        <state relative-caret-position="268">
+          <caret line="141" column="4" selection-start-line="141" selection-start-column="4" selection-end-line="141" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReedSolomon.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
         </state>
       </provider>
     </entry>
