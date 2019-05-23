@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/vover/CLionProjects/untitled5/ReedSolomon.cpp
+ReedSolomon.h
+/home/vover/CLionProjects/untitled5/ReedSolomon.h
+
+/home/vover/CLionProjects/untitled5/ReedSolomon.h
+array
+-
+
+/home/vover/CLionProjects/untitled5/main.cpp
+iostream
+-
+cstdint
+-
+ReedSolomon.h
+/home/vover/CLionProjects/untitled5/ReedSolomon.h
+
