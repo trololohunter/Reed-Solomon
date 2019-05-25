@@ -30,12 +30,24 @@ void vecmultG (std::array<int, QmS> &vec_in, std::array<int, Qm> &vec_out)
 
 int R_S_code (std::array<int, QmS * N> &in, std::array<int, Qm * N> &out)
 {
-    std::array<int, Qm> vec_in;
-    std::array<int, QmS> vec_out;
-
-
-
-
+    std::array<int, QmS> vec_in{};
+    std::array<int, Qm> vec_out{};
+    int i, j, k;
+    printf("\n");
+    for (i = 0; i < N; ++i) {
+        for (j = 0; j < QmS; ++j) {
+            vec_in[j] = in[i * QmS + j];
+            //printf("%d \t", vec_in[j]);
+        }
+        //printf("\n");
+        vecmultG(vec_in, vec_out);
+        for (j = 0; j < Qm; ++j) {
+            out[i * Qm + j] = vec_out[j];
+            //printf("%d \t", vec_out[j]);
+            vec_out[j] = 0;
+        }
+        //printf("\n");
+    }
 }
 
 int R_S_decode (std::array<int, Qm * N> &in, std::array<int, QmS * N> &out)

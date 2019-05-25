@@ -11,7 +11,7 @@
 #define Qm 6    // Q - 1
 #define S 2
 #define QmS 4   // Q - 1 - S
-#define N 10
+#define N 20
 
 
 
@@ -37,9 +37,9 @@ constexpr std::array<int, Q * Q> multymatrix() {
         //mm[i].resize(P-1);
         for (int j = 0; j < Q; ++j) {
             mm[i * Q + j] = (i * j) % Q;
-            printf ("%d \t", mm[i * Q + j]);
+//            printf ("%d \t", mm[i * Q + j]);
         }
-        printf("\n");
+//        printf("\n");
     }
 
     return mm;
@@ -53,9 +53,9 @@ constexpr std::array<int, Q * Q> plusminus () {
         for (int j = 0; j < Q; ++j)
         {
             pm[i * Q + j] = (j + i) % Q;
-            printf ("%d \t", pm[i * Q + j]);
+//            printf ("%d \t", pm[i * Q + j]);
         }
-        printf("\n");
+//        printf("\n");
 
     }
 
@@ -74,13 +74,13 @@ constexpr std::array<int, Qm * S> HH(){
     for (i = 1; i < S; ++i)
         for (j = 0; j < Qm; ++j)
             Hh[i * Qm + j] = (Hh[(i-1) * Qm + j] * Hh[Qm + j]) % Q;
-
+/*
     for (i = 0; i < S; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", Hh[i * Qm + j]);
         printf("\n");
     }
-
+*/
 
 
     return Hh;
@@ -107,12 +107,12 @@ constexpr std::array<int, QmS * Qm> GG(std::array<int, Qm * S> hh, const std::ar
     for (i = 0; i < S; ++i)
     {
         for (j = 0; j < S; ++j) {
-            if ((i == j) || (hh[i * Qm + i + QmS] - 1 == 0)) continue;
-//            coef = zp_rev[hh[i * Qm + i + QmS] - 1] * hh[j * Qm + i + QmS] % Q;
-            coef = multym[zp_rev[hh[i * Qm + i + QmS] - 1] * Qm + hh[j * Qm + i + QmS]];
+            if ((i == j) || (hh[i * Qm + i + QmS] == 0)) continue;
+//          coef = zp_rev[hh[i * Qm + i + QmS] - 1] * hh[j * Qm + i + QmS] % Q;
+            coef = multym[zp_rev[hh[i * Qm + i + QmS] - 1] * Q + hh[j * Qm + i + QmS]];
             for (k = 0; k < Qm; k++) {
                 hh[j * Qm + k] = pm[hh[j * Qm + k] * Q + 7 - multym[coef * Q + hh[i * Qm + k]]];
-                if (hh[j * Qm + k] < 0) hh[j * Qm + k] += Q;
+                //if (hh[j * Qm + k] < 0) hh[j * Qm + k] += Q;
             }
         }
     }
@@ -130,12 +130,13 @@ constexpr std::array<int, QmS * Qm> GG(std::array<int, Qm * S> hh, const std::ar
     for (i = 0; i < QmS; ++i)
         for (j = QmS; j < Qm; ++j)
             Gg[i * Qm + j] = 7 - hh[(j - QmS) * Qm + i];
-/*    printf("\n");
+/*
+    printf("\n");
     for (i = 0; i < QmS; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", Gg[i * Qm + j]);
         printf("\n");
-    } */
+    }*/
     return Gg;
 };
 

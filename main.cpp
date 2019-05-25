@@ -10,21 +10,29 @@
 
 int main() {
     const::std::array<int, Qm> rev = Zp_reverse();
-    for (int i = 1; i < Q; ++i)
+    int i;
+    for ( i = 1; i < Q; ++i)
         printf ("for %d reverse = %d \n", i, rev[i-1]);
     auto mm = multymatrix();
     auto hh = HH();
     auto pm = plusminus();
     auto gg = GG(hh, rev, mm, pm);
+    std::array<int, QmS * N> in{};
+    std::array<int, Qm * N> out{};
 
-    //printf ("%d \t %d \t %d", 3 % 7, (-3) % 7, -3 % 7);
-
-    printf("\n");printf("\n");
-    for (int i = 0; i < S; i++) {
-        for (int j = 0; j < Qm; ++j)
-            printf("%3d \t", hh[i * Qm + j]);
-        printf("\n");
+    for ( i = 0; i < QmS * N; i++) {
+        in[i] = rand() % Q;
+        printf("%d \t", in[i]);
     }
+
+    R_S_code(in, out);
+
+    for (i = 0; i < Qm * N; ++i) {
+        printf("%d \t", out[i]);
+    }
+
+    printf("\n");
+
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
