@@ -1,6 +1,7 @@
 //
 // Created by vover on 5/17/19.
 //
+
 #include "ReedSolomon.h"
 
 auto multy_matrix = multymatrix();
@@ -19,10 +20,12 @@ auto G = GG(H, zp_rev, multy_matrix, plus);
 void vecmultG (std::array<int, QmS> &vec_in, std::array<int, Qm> &vec_out)
 {
     int i = 0, k = 0;
+    for (; i < QmS; ++i)
+        vec_out[i] = vec_in[i];
 
     for (; i < Qm; ++i)
         for (k = 0; k < QmS; ++k)
-            vec_out[i] = plus[vec_out[i] * Q + multy_matrix[vec_in[k] * Q + G[k * Qm + i]]];
+            vec_out[i] = plus[vec_out[i] * Q + multy_matrix[vec_in[k] * Q + G[k * S + i - QmS]]];
 
     return;
 }

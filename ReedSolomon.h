@@ -86,9 +86,9 @@ constexpr std::array<int, Qm * S> HH(){
     return Hh;
 }
 
-constexpr std::array<int, QmS * Qm> GG(std::array<int, Qm * S> hh, const std::array<int, Qm> zp_rev, const std::array<int, Q * Q> multym, const std::array<int, Q * Q> pm)
+constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::array<int, Qm> zp_rev, const std::array<int, Q * Q> multym, const std::array<int, Q * Q> pm)
 {
-    std::array<int, QmS * Qm> Gg{};
+    std::array<int, QmS * S> Gg{};
     int i = 0, j = 0, k = 0;
     int coef = 0;
 /*
@@ -124,19 +124,19 @@ constexpr std::array<int, QmS * Qm> GG(std::array<int, Qm * S> hh, const std::ar
         printf("\n");
     }
 */
-    for (i = 0; i < QmS; ++i)
-        Gg[i * Qm + i] = 1;
+//    for (i = 0; i < QmS; ++i)
+//        Gg[i * Qm + i] = 1;
 
     for (i = 0; i < QmS; ++i)
-        for (j = QmS; j < Qm; ++j)
-            Gg[i * Qm + j] = 7 - hh[(j - QmS) * Qm + i];
-/*
+        for (j = 0; j < S; ++j)
+            Gg[i * S + j] = 7 - hh[j * Qm + i];
+
     printf("\n");
     for (i = 0; i < QmS; i++) {
-        for (j = 0; j < Qm; ++j)
-            printf("%3d \t", Gg[i * Qm + j]);
+        for (j = 0; j < S; ++j)
+            printf("%3d \t", Gg[i * S + j]);
         printf("\n");
-    }*/
+    }
     return Gg;
 };
 
