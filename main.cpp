@@ -7,6 +7,7 @@
 
 //std::array<int, > GG(std::array<std::array<int, P>, S> Hh);
 
+//тут будет типа версия с использованием оупенсиэль
 
 int main() {
     const::std::array<int, Qm> rev = Zp_reverse();
