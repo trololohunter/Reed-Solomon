@@ -34,6 +34,16 @@ int main() {
 
     printf("\n");
 
+    out[16] = 4;
+
+    R_S_decode(out, in);
+
+    for (i = 0; i < QmS * N; ++i) {
+        printf("%d \t", in[i]);
+    }
+
+    printf("\n");
+
 
     std::cout << "Hello, World!" << std::endl;
     return 0;

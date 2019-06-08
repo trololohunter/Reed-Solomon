@@ -9,9 +9,10 @@
 
 #define Q 7
 #define Qm 6    // Q - 1
-#define S 2
+#define T 1 // number of errors that can be corrected
+#define S 2 // number of errors that can be detected (number of verification characters)
 #define QmS 4   // Q - 1 - S
-#define N 20
+#define N 4
 
 
 
