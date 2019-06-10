@@ -34,7 +34,7 @@ int main() {
 
     printf("\n");
 
-    out[16] = 4;
+    out[14] = 4;
 
     R_S_decode(out, in);
 
