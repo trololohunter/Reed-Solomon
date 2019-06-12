@@ -124,9 +124,9 @@ int Gauss_in_Zq (std::array<int, T * T> &matrix, std::array<int, T> &vec_b, int 
                 if (i == j) continue;
                 coef = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + matrix[j * h + i]];
                 for (k = 0; k < h; k++) {
-                    matrix[j * h + k] = plus[matrix[j * h + k] * Q + 7 - multy_matrix[coef * Q + matrix[i * h + k]]];
+                    matrix[j * h + k] = plus[matrix[j * h + k] * Q + Q - multy_matrix[coef * Q + matrix[i * h + k]]];
                 }
-                vec_b[j] = plus[vec_b[j] * Q + 7 - multy_matrix[coef * Q + vec_b[i]]];
+                vec_b[j] = plus[vec_b[j] * Q + Q - multy_matrix[coef * Q + vec_b[i]]];
             }
         }
 
@@ -146,7 +146,7 @@ int search_errors (std::array<int, S> &vec_in, std::array<int, T> &pos_of_er) {
         for (i = 0; i < h; ++i) {
             for (j = 0; j < h; ++j)
                 matrix[i * h + j] = vec_in[i + j];
-            vec_b[i] = 7 - vec_in[h + i];
+            vec_b[i] = Q - vec_in[h + i];
         }
         if (Gauss_in_Zq(matrix, vec_b, h) == 0) break;
     }
@@ -188,7 +188,7 @@ int check_vec (std::array<int, Qm> &vec_in, std::array<int, T> &pos_of_er, std::
         for (j = 0; j < Qm; ++j)
             vec[j] = vec_in[j];
         for (i = 0; i < h; ++i)
-            vec[pos_of_er[i]-1] = (z2_vec[T - i]) ? plus[vec[pos_of_er[i]-1] * Q + vec_b[i]] : plus[vec[pos_of_er[i]-1] * Q + 7 - vec_b[i]];
+            vec[pos_of_er[i]-1] = (z2_vec[T - i]) ? plus[vec[pos_of_er[i]-1] * Q + vec_b[i]] : plus[vec[pos_of_er[i]-1] * Q + Q - vec_b[i]];
         if (Hmultvec(vec, vec_) == 0) {
             for (j = 0; j < Qm; ++j)
                 vec_in[j] = vec[j];

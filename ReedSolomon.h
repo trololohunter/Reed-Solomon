@@ -7,11 +7,11 @@
 
 #include<array>
 
-#define Q 7
-#define Qm 6    // Q - 1
+#define Q 11
+#define Qm 10    // Q - 1
 #define T 1 // number of errors that can be corrected
 #define S 2 // number of errors that can be detected (number of verification characters)
-#define QmS 4   // Q - 1 - S
+#define QmS 8   // Q - 1 - S
 #define N 4
 
 
@@ -116,25 +116,25 @@ constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::arr
 
             coef = hh[j * Qm + i + QmS];
             for (k = 0; k < Qm; k++) {
-                hh[j * Qm + k] = pm[hh[j * Qm + k] * Q + 7 - multym[coef * Q + hh[i * Qm + k]]];
+                hh[j * Qm + k] = pm[hh[j * Qm + k] * Q + Q - multym[coef * Q + hh[i * Qm + k]]];
                 //if (hh[j * Qm + k] < 0) hh[j * Qm + k] += Q;
             }
         }
     }
-/*
+
     printf("\n");
     for (i = 0; i < S; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", hh[i * Qm + j]);
         printf("\n");
     }
-*/
+
 //    for (i = 0; i < QmS; ++i)
 //        Gg[i * Qm + i] = 1;
 
     for (i = 0; i < QmS; ++i)
         for (j = 0; j < S; ++j)
-            Gg[i * S + j] = 7 - hh[j * Qm + i];
+            Gg[i * S + j] = Q - hh[j * Qm + i];
 
     printf("\n");
     for (i = 0; i < QmS; i++) {
