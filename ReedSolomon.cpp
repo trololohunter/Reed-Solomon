@@ -112,13 +112,16 @@ int Gauss_in_Zq (std::array<int, T * T> &matrix, std::array<int, T> &vec_b, int 
         vec_b[i] = vec_b[max_ind];
         vec_b[max_ind] = coef;
 
-        //тут немножечко лажа текущая строчка не домножается на обратную, такая же фигня в GG, надо иправить
+        for (k = i+1; k < h; ++k)
+            matrix[i * h + k] = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + matrix[i * h + k]];
+
+        vec_b[i] = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + vec_b[i]];
 
 
         for (i = 0; i < h; ++i)
         {
             for (j = 0; j < h; ++j) {
-                if ((i == j) || (matrix[i * h + i] == 0)) continue;
+                if (i == j) continue;
                 coef = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + matrix[j * h + i]];
                 for (k = 0; k < h; k++) {
                     matrix[j * h + k] = plus[matrix[j * h + k] * Q + 7 - multy_matrix[coef * Q + matrix[i * h + k]]];
@@ -185,7 +188,7 @@ int check_vec (std::array<int, Qm> &vec_in, std::array<int, T> &pos_of_er, std::
         for (j = 0; j < Qm; ++j)
             vec[j] = vec_in[j];
         for (i = 0; i < h; ++i)
-            vec[pos_of_er[i]] = (z2_vec[T - i]) ? plus[vec[pos_of_er[i]] * Q + vec_b[i]] : plus[vec[pos_of_er[i]] * Q + 7 - vec_b[i]];
+            vec[pos_of_er[i]-1] = (z2_vec[T - i]) ? plus[vec[pos_of_er[i]-1] * Q + vec_b[i]] : plus[vec[pos_of_er[i]-1] * Q + 7 - vec_b[i]];
         if (Hmultvec(vec, vec_) == 0) {
             for (j = 0; j < Qm; ++j)
                 vec_in[j] = vec[j];
@@ -200,19 +203,20 @@ int fix_errors (std::array<int, Qm> &vec_in, std::array<int, T> &pos_of_er, int 
     int i, j;
     std::array<int, T * T> matrix{};
     std::array<int, T> vec_b{};
-    std::array<int, Qm> vec{};
+    std::array<int, Qm> vec = vec_in;
     std::array<int, S> vec_{};
 
     Hmultvec(vec, vec_);
 
     for (j = 0; j < h; ++j)
         matrix[j] = pos_of_er[j];
+    vec_b[0] = vec_[S-1];
 
     for (i = 1; i < h; ++i) {
         for (j = 0; j < h; ++j)
             matrix[i * h + j] = multy_matrix[pos_of_er[j] * Q + matrix[(i - 1) * h + j]];
 
-        vec_b[i] = vec_[i];
+        vec_b[i] = vec_[S- 1 -i];
     }
 
     if (Gauss_in_Zq(matrix, vec_b, h) != 0) {

@@ -107,10 +107,14 @@ constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::arr
 */
     for (i = 0; i < S; ++i)
     {
+        for (k = 0; k < Qm; k++)
+            hh[i * Qm + k] = multym[zp_rev[hh[i * Qm + i + QmS] - 1] * Q + hh[i * Qm + k]];
+
         for (j = 0; j < S; ++j) {
             if ((i == j) || (hh[i * Qm + i + QmS] == 0)) continue;
 //          coef = zp_rev[hh[i * Qm + i + QmS] - 1] * hh[j * Qm + i + QmS] % Q;
-            coef = multym[zp_rev[hh[i * Qm + i + QmS] - 1] * Q + hh[j * Qm + i + QmS]];
+
+            coef = hh[j * Qm + i + QmS];
             for (k = 0; k < Qm; k++) {
                 hh[j * Qm + k] = pm[hh[j * Qm + k] * Q + 7 - multym[coef * Q + hh[i * Qm + k]]];
                 //if (hh[j * Qm + k] < 0) hh[j * Qm + k] += Q;
