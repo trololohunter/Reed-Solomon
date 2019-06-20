@@ -7,10 +7,10 @@
 
 #include<array>
 
-#define Q 11
-#define Qm 10    // Q - 1
-#define T 1 // number of errors that can be corrected
-#define S 2 // number of errors that can be detected (number of verification characters)
+#define Q 13
+#define Qm 12    // Q - 1
+#define T 2 // number of errors that can be corrected
+#define S 4 // number of errors that can be detected (number of verification characters)
 #define QmS 8   // Q - 1 - S
 #define N 4
 
@@ -33,14 +33,16 @@ constexpr std::array<int, Qm> Zp_reverse() {
 constexpr std::array<int, Q * Q> multymatrix() {
     std::array<int, Q * Q> mm{};
 
+    printf("\n");
+    printf ("multymatrix \n");
     for (int i = 0; i < Q; ++i)
     {
         //mm[i].resize(P-1);
         for (int j = 0; j < Q; ++j) {
             mm[i * Q + j] = (i * j) % Q;
-//            printf ("%d \t", mm[i * Q + j]);
+            printf ("%d \t", mm[i * Q + j]);
         }
-//        printf("\n");
+        printf("\n");
     }
 
     return mm;
@@ -48,15 +50,16 @@ constexpr std::array<int, Q * Q> multymatrix() {
 
 constexpr std::array<int, Q * Q> plusminus () {
     std::array<int, Q * Q> pm{};
-
+    printf("\n");
+    printf ("plusminus \n");
     for (int i = 0; i < Q; ++i)
     {
         for (int j = 0; j < Q; ++j)
         {
             pm[i * Q + j] = (j + i) % Q;
-//            printf ("%d \t", pm[i * Q + j]);
+            printf ("%d \t", pm[i * Q + j]);
         }
-//        printf("\n");
+        printf("\n");
 
     }
 
@@ -67,21 +70,22 @@ constexpr std::array<int, Q * Q> plusminus () {
 constexpr std::array<int, Qm * S> HH(){
     std::array<int, Qm * S> Hh{};
     int i = 0, j = 0;
-
+    printf("\n");
+    printf("HH\n");
     for (j = 0; j < Qm; ++j) {
         Hh[j] = 1;
         Hh[Qm + j] = j+1;
     }
-    for (i = 1; i < S; ++i)
+    for (i = 2; i < S; ++i)
         for (j = 0; j < Qm; ++j)
             Hh[i * Qm + j] = (Hh[(i-1) * Qm + j] * Hh[Qm + j]) % Q;
-/*
+
     for (i = 0; i < S; i++) {
         for (j = 0; j < Qm; ++j)
             printf("%3d \t", Hh[i * Qm + j]);
         printf("\n");
     }
-*/
+
 
 
     return Hh;
@@ -92,6 +96,8 @@ constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::arr
     std::array<int, QmS * S> Gg{};
     int i = 0, j = 0, k = 0;
     int coef = 0;
+    printf("\n");
+    printf("\n");
 /*
     for (i = 1; i < S; ++i)
     {
@@ -107,16 +113,16 @@ constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::arr
 */
     for (i = 0; i < S; ++i)
     {
-        for (k = 0; k < Qm; k++)
-            hh[i * Qm + k] = multym[zp_rev[hh[i * Qm + i + QmS] - 1] * Q + hh[i * Qm + k]];
+        coef = zp_rev[hh[i * Qm + i + QmS] - 1];
+        for (k = 0; k < Qm; ++k)
+            hh[i * Qm + k] = multym[coef * Q + hh[i * Qm + k]];
 
         for (j = 0; j < S; ++j) {
-            if ((i == j) || (hh[i * Qm + i + QmS] == 0)) continue;
-//          coef = zp_rev[hh[i * Qm + i + QmS] - 1] * hh[j * Qm + i + QmS] % Q;
-
+            if ((i == j)) continue;
+            if (hh[i * Qm + i + QmS] == 0) printf ("hh[i * Qm + i + QmS] ==== 0 \n");
             coef = hh[j * Qm + i + QmS];
-            for (k = 0; k < Qm; k++) {
-                hh[j * Qm + k] = pm[hh[j * Qm + k] * Q + Q - multym[coef * Q + hh[i * Qm + k]]];
+            for (k = 0; k < Qm; ++k) {
+                hh[j * Qm + k] = pm[hh[j * Qm + k] * Q - multym[coef * Q + hh[i * Qm + k]] + Q * ((hh[i * Qm + k] == 0) ? 0 : 1)];
                 //if (hh[j * Qm + k] < 0) hh[j * Qm + k] += Q;
             }
         }
@@ -134,7 +140,7 @@ constexpr std::array<int, QmS * S> GG(std::array<int, Qm * S> hh, const std::arr
 
     for (i = 0; i < QmS; ++i)
         for (j = 0; j < S; ++j)
-            Gg[i * S + j] = Q - hh[j * Qm + i];
+            Gg[i * S + j] = (Q - hh[j * Qm + i]) % Q;
 
     printf("\n");
     for (i = 0; i < QmS; i++) {

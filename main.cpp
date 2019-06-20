@@ -14,10 +14,10 @@ int main() {
     int i;
     for ( i = 1; i < Q; ++i)
         printf ("for %d reverse = %d \n", i, rev[i-1]);
-    auto mm = multymatrix();
-    auto hh = HH();
-    auto pm = plusminus();
-    auto gg = GG(hh, rev, mm, pm);
+    //auto mm = multymatrix();
+    //auto hh = HH();
+    //auto pm = plusminus();
+    //auto gg = GG(hh, rev, mm, pm);
     std::array<int, QmS * N> in{};
     std::array<int, Qm * N> out{};
 
@@ -34,7 +34,17 @@ int main() {
 
     printf("\n");
 
-    out[14] = 3;
+    out[14] = 6;
+    out[22] = 8;
+    out[23] = 7;
+    out[31] = 2;
+    out[32] = 6;
+
+    for (i = 0; i < Qm * N; ++i) {
+        printf("%d \t", out[i]);
+    }
+
+    printf("\n");
 
     R_S_decode(out, in);
 

@@ -27,7 +27,7 @@ void vecmultG (std::array<int, QmS> &vec_in, std::array<int, Qm> &vec_out)
     for (i = QmS; i < Qm; ++i) {
         vec_out[i] = 0;
         for (k = 0; k < QmS; ++k)
-            vec_out[i] = plus[vec_out[i] * Q + multy_matrix[vec_in[k] * Q + G[k * S + i - QmS]]];
+            vec_out[i] = plus[vec_out[i] * Q + multy_matrix[vec_in[k] * Q + G[k * S + (i - QmS)]]];
     }
 
     return;
@@ -75,9 +75,9 @@ int Hmultvec (std::array<int, Qm> &vec_in, std::array<int, S> &vec_out)
 int Gorner (std::array<int, T> &Lambda, int h, int x)
 {
     int i;
-    int ans = multy_matrix[Lambda[h-1] * Q + x];
+    int ans = multy_matrix[Lambda[0] * Q + x];
 
-    for (i = h-2; i > -1; --i)
+    for (i = 1; i < h; ++i)
     {
         ans = multy_matrix[plus[ans * Q + Lambda[i]] + x * Q];
     }
@@ -88,6 +88,17 @@ int Gauss_in_Zq (std::array<int, T * T> &matrix, std::array<int, T> &vec_b, int 
 {
     int max_ind, max, coef;
     int i, j, k;
+
+    for (i = 0; i < h; ++i)
+    {
+        for (j = 0; j < h; ++j)
+            printf ("%3d \t", matrix[i * h + j]);
+        printf ("%3d \n", vec_b[i]);
+    }
+    printf("\n\n");
+
+
+
 
     for (i = 0; i < h; ++i)
     {
@@ -112,23 +123,30 @@ int Gauss_in_Zq (std::array<int, T * T> &matrix, std::array<int, T> &vec_b, int 
         vec_b[i] = vec_b[max_ind];
         vec_b[max_ind] = coef;
 
-        for (k = i+1; k < h; ++k)
-            matrix[i * h + k] = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + matrix[i * h + k]];
+        coef = zp_rev[matrix[i * h + i] - 1];
+        for (k = i; k < h; ++k)
+            matrix[i * h + k] = multy_matrix[coef * Q + matrix[i * h + k]];
 
-        vec_b[i] = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + vec_b[i]];
+        vec_b[i] = multy_matrix[coef * Q + vec_b[i]];
 
 
-        for (i = 0; i < h; ++i)
-        {
-            for (j = 0; j < h; ++j) {
-                if (i == j) continue;
-                coef = multy_matrix[zp_rev[matrix[i * h + i] - 1] * Q + matrix[j * h + i]];
-                for (k = 0; k < h; k++) {
-                    matrix[j * h + k] = plus[matrix[j * h + k] * Q + Q - multy_matrix[coef * Q + matrix[i * h + k]]];
-                }
-                vec_b[j] = plus[vec_b[j] * Q + Q - multy_matrix[coef * Q + vec_b[i]]];
+
+        for (j = 0; j < h; ++j) {
+            if (i == j) continue;
+            coef = matrix[j * h + i];
+            for (k = 0; k < h; k++) {
+                matrix[j * h + k] = plus[matrix[j * h + k] * Q - multy_matrix[coef * Q + matrix[i * h + k]] + Q * ((matrix[i * h + k] == 0) ? 0 : 1)];
             }
+            vec_b[j] = plus[vec_b[j] * Q - multy_matrix[coef * Q + vec_b[i]] + Q * ((vec_b[i] == 0) ? 0 : 1)];
         }
+
+        for (int ii = 0; ii < h; ++ii)
+        {
+            for (int jj = 0; jj < h; ++jj)
+                printf ("%3d \t", matrix[ii * h + jj]);
+            printf ("%3d \n", vec_b[ii]);
+        }
+        printf("\n\n");
 
     }
 
@@ -146,17 +164,17 @@ int search_errors (std::array<int, S> &vec_in, std::array<int, T> &pos_of_er) {
         for (i = 0; i < h; ++i) {
             for (j = 0; j < h; ++j)
                 matrix[i * h + j] = vec_in[i + j];
-            vec_b[i] = Q - vec_in[h + i];
+            vec_b[i] = (Q - vec_in[h + i]) % Q;
         }
         if (Gauss_in_Zq(matrix, vec_b, h) == 0) break;
     }
 
     if (h == 0) return -1;
 
-    j = -1;
+    j = h;
     for (i = 1; i < Q; ++i)
         if (Gorner(vec_b, h, i) == 0)
-            pos_of_er[++j] = zp_rev[i - 1];
+            pos_of_er[--j] = zp_rev[i - 1];
 
     return h;
 }
@@ -164,7 +182,7 @@ int search_errors (std::array<int, S> &vec_in, std::array<int, T> &pos_of_er) {
 void inc_z2_vec (std::array<int, T> &vec)
 {
     int i;
-    for (i = T; i > 0; --i)
+    for (i = T-1; i > 0; --i)
         if (vec[i] == 0) {
             vec[i] = 1;
             return;
@@ -188,7 +206,7 @@ int check_vec (std::array<int, Qm> &vec_in, std::array<int, T> &pos_of_er, std::
         for (j = 0; j < Qm; ++j)
             vec[j] = vec_in[j];
         for (i = 0; i < h; ++i)
-            vec[pos_of_er[i]-1] = (z2_vec[T - i]) ? plus[vec[pos_of_er[i]-1] * Q + vec_b[i]] : plus[vec[pos_of_er[i]-1] * Q + Q - vec_b[i]];
+            vec[pos_of_er[i]-1] = (z2_vec[T-1 - i]) ? plus[vec[pos_of_er[i]-1] * Q + vec_b[i]] : plus[vec[pos_of_er[i]-1] * Q - vec_b[i] + Q * ((vec_b[i] == 0) ? 0 : 1)];
         if (Hmultvec(vec, vec_) == 0) {
             for (j = 0; j < Qm; ++j)
                 vec_in[j] = vec[j];
@@ -210,15 +228,16 @@ int fix_errors (std::array<int, Qm> &vec_in, std::array<int, T> &pos_of_er, int 
 
     for (j = 0; j < h; ++j)
         matrix[j] = pos_of_er[j];
-    vec_b[0] = vec_[S-1];
+    vec_b[0] = vec_[1];
 
     for (i = 1; i < h; ++i) {
         for (j = 0; j < h; ++j)
             matrix[i * h + j] = multy_matrix[pos_of_er[j] * Q + matrix[(i - 1) * h + j]];
 
-        vec_b[i] = vec_[S- 1 -i];
+        vec_b[i] = vec_[i * 2 + 1];
     }
 
+    printf("исправление \n");
     if (Gauss_in_Zq(matrix, vec_b, h) != 0) {
         printf("не удалось определить отклонение \n");
         return -1;
@@ -238,6 +257,10 @@ int search_and_fix_errors (std::array<int, Qm> &v)
     int error;
 
     Hmultvec(v, vec);
+
+    for (int i = 0; i < S; ++i)
+        printf ("%3d \t", vec[i]);
+    printf("\n");
 
     if((error = search_errors(vec, positions_of_errors)) < 0) {
         printf("все очень плохо\n");
@@ -279,7 +302,7 @@ int R_S_decode (std::array<int, Qm * N> &in, std::array<int, QmS * N> &out)
                     //vec_out[j] = 0;
                 }
             }
-            else printf ("не удалось исправить ошибки");
+            else printf ("не удалось исправить ошибки\n");
         }
         //printf("\n");
     }
