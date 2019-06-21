@@ -21,4 +21,8 @@ cstdint
 -
 ReedSolomon.h
 /home/vover/CLionProjects/untitled5/ReedSolomon.h
+boost/compute/core.hpp
+-
+boost/compute/container/vector.hpp
+-
 
