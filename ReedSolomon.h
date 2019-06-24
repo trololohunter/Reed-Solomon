@@ -7,10 +7,10 @@
 
 #include<array>
 
-#define Qq 13
-#define Qm 12    // Q - 1
-#define Tt 2 // number of errors that can be corrected
-#define Ss 4 // number of errors that can be detected (number of verification characters)
+#define Qq 11
+#define Qm 10    // Q - 1
+#define Tt 1 // number of errors that can be corrected
+#define Ss 2 // number of errors that can be detected (number of verification characters)
 #define QmS 8   // Q - 1 - S
 #define Nn 4
 

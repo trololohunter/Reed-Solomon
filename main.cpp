@@ -4,10 +4,11 @@
  #include <cstdint>
 
 #include "ReedSolomon.h"
+//#include <boost/compute.hpp>
+
 #include <boost/compute/core.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/utility/source.hpp>
-//#include <boost/compute/type_traits/type_name.hpp>
 
 
 auto multy_matrix = multymatrix();
@@ -22,11 +23,12 @@ auto G = GG(H, zp_rev, multy_matrix, plus);
 boost::compute::kernel make_code_kernel (const boost::compute::context& context)
 {
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE (
-            __kernel void code (__read_only int *matrixG,
-                                __read_only int *matrixmultiply,
-                                __read_only int *matrixplus,
-                                __read_only int *vector_for_code,
-                                __write_only int *result)
+            __kernel void code (
+                    const int *matrixG,
+                    const int *matrixmultiply,
+                    const int *matrixplus,
+                    const int *vector_for_code,
+                    int *result )
             {
                 uint x = get_global_id(0);
                 uint size = get_global_size(0);
@@ -36,17 +38,28 @@ boost::compute::kernel make_code_kernel (const boost::compute::context& context)
                 {
                     for (i = 0; i < QmS; ++i)
                         result[y * Qm + i] = vector_for_code[y * QmS + i];
-                    sum = 0;
-                    for (i = QmS; i < Qm; ++i)
-                       for (k = 0; k < QmS; ++k)
-                        sum = matrixplus[sum * Qq + matrixmultiply[vector_for_code[y * QmS + k] * Qq + matrixG[k * Ss + (i - QmS)]]];
-                    result[y * Qm + i] = sum;
+
+                    for (i = QmS; i < Qm; ++i){
+                        sum = 0;
+                        for (k = 0; k < QmS; ++k)
+                            sum = matrixplus[sum * Qq + matrixmultiply[vector_for_code[y * QmS + k] * Qq + matrixG[k * Ss + (i - QmS)]]];
+                        result[y * Qm + i] = sum;
+                    }
 
                     y += size;
                 }
 
             }
             );
+
+    //std::stringstream options;
+    //options << "-DTILE_DIM=" << 20 << " -DBLOCK_ROWS=" << 4;
+
+    boost::compute::program program = boost::compute::program::create_with_source(source, context);
+
+    program.build();
+
+    return program.create_kernel("code");
 }
 
 
@@ -113,6 +126,7 @@ int main() {
     }
 
     //R_S_code(in, out);
+
     boost_compute_R_S_code(in, out);
 
     for (i = 0; i < Qm * Nn; ++i) {
@@ -152,6 +166,37 @@ int boost_compute_R_S_code (std::array<int, QmS * Nn> &in, std::array<int, Qm * 
 {
     boost::compute::device gpu = boost::compute::system::default_device();
     boost::compute::context context(gpu);
+
+    std::cout << "\n device: " << gpu.name() << std::endl;
+
+    const char source[] =
+            "__kernel void code ("
+            "        const int *matrixG,"
+            "        const int *matrixmultiply,"
+            "        const int *matrixplus,"
+            "        const int *vector_for_code,"
+            "        int *result ) {"
+            "    uint x = get_global_id(0);"
+            "    uint size = get_global_size(0);"
+            "    uint i = 0, k = 0, sum = 0, j = 0, y = x;"
+            "    for (j = 0; j * size + x < Nn; ++j) {"
+            "        for (i = 0; i < QmS; ++i)"
+            "            result[y * Qm + i] = vector_for_code[y * QmS + i];"
+            "        for (i = QmS; i < Qm; ++i) {"
+            "            sum = 0;"
+            "            for (k = 0; k < QmS; ++k)"
+            "                sum = matrixplus[sum * Qq + matrixmultiply[vector_for_code[y * QmS + k] * Qq + matrixG[k * Ss + (i - QmS)]]];"
+            "            result[y * Qm + i] = sum;"
+            "        }"
+            "        y += size;"
+            "    }"
+            "}";
+    boost::compute::program program = boost::compute::program::create_with_source(source, context);
+
+    program.build();
+
+    boost::compute::kernel kernel(program, "add");
+
     boost::compute::command_queue queue(context, gpu);
 
     boost::compute::buffer buffer_matrix_G(context, QmS * Ss * sizeof(int));
@@ -159,10 +204,6 @@ int boost_compute_R_S_code (std::array<int, QmS * Nn> &in, std::array<int, Qm * 
     boost::compute::buffer buffer_matrix_plus(context, Qq * Qq * sizeof(int));
     boost::compute::buffer buffer_vec_for_code(context, QmS * Nn * sizeof(int));
     boost::compute::buffer buffer_result(context, Qm * Nn * sizeof(int));
-
-    std::cout << "device: " << gpu.name() << std::endl;
-
-    boost::compute::kernel kernel = make_code_kernel(context);
 
     kernel.set_arg(0, buffer_matrix_G);
     kernel.set_arg(1, buffer_matrix_multiply);
@@ -193,3 +234,11 @@ int boost_compute_R_S_decode (std::array<int, Qm * Nn> &in, std::array<int, QmS 
 
     return 0;
 }
+
+
+
+/*__read_only int *matrixG,
+                                __read_only int *matrixmultiply,
+                                __read_only int *matrixplus,
+                                __read_only int *vector_for_code,
+                                __write_only int *result */
